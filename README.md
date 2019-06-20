@@ -16,7 +16,7 @@
 
 ## 环境要求
 
-- [ ] 🐍Python3.5+
+- [ ] Python3.5+
 - [ ] Mysql
 - [ ] Chrome
 - [ ] Selenium
