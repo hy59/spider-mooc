@@ -2,7 +2,7 @@
 @Description: The spider file 
 @Author: Chase Huang
 @Date: 2019-05-30 09:39:37
-@LastEditTime: 2019-05-30 11:14:28
+@LastEditTime: 2019-06-20 10:15:21
 '''
 import time
 import random
@@ -26,7 +26,7 @@ def get_courses_url(course_url, driver):
         # remove the close-icon
         driver.find_element_by_class_name("u-icon-close").click()
 
-    except:
+    except Exception:
         pass
 
     while True:
@@ -43,7 +43,7 @@ def get_courses_url(course_url, driver):
                             'www') and not link.__contains__('http'):
                         link = 'https:' + link
                         link_list.append(link)
-                except:
+                except Exception:
                     continue
 
         # auto click the next page
@@ -81,6 +81,7 @@ def paser_comments(url, category, driver):
     teacher = info(".cnt.f-fl").text().replace("\n", " ")
 
     # init the parameter list
+    userid_list = []  # userid_list
     names_list = []  # nikename
     comments_list = []  # comments
     created_time_list = []  # created_time
@@ -123,6 +124,8 @@ def paser_comments(url, category, driver):
                 voteup = ctt.find_all('span', {'primary-link'})
                 rating = ctt.find_all('div', {"star-point"})
 
+                for userid in author_name:
+                    userid_list.append(userid.get('href').split('=')[-1])
                 for name in author_name:
                     names_list.append(name.text)
                 for comment in comments:
@@ -177,6 +180,8 @@ def paser_comments(url, category, driver):
                     voteup = ctt.find_all('span', {'primary-link'})
                     rating = ctt.find_all('div', {"star-point"})
 
+                    for userid in author_name:
+                        userid_list.append(userid.get('href').split('=')[-1])
                     for name in author_name:
                         names_list.append(name.text)
                     for comment in comments:
@@ -189,10 +194,8 @@ def paser_comments(url, category, driver):
                         voteup_list.append(vt.text.strip('\n'))
                     for r in rating:
                         rating_list.append(str(len(r)))
-
                 break
-
-        except:
+        except Exception:
             break
 
-    return category, course_name, teacher, url, names_list, comments_list, created_time_list, course_times_list, voteup_list, rating_list
+    return category, course_name, teacher, url, userid_list, names_list, comments_list, created_time_list, course_times_list, voteup_list, rating_list
